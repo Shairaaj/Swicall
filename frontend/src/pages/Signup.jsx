@@ -12,10 +12,13 @@ function Signup({ setUserId }) {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/signup", {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/auth/signup`,
+        {
+          email,
+          password,
+        }
+      );
       localStorage.setItem("userId", res.data.userId);
       setUserId(res.data.userId);
       navigate("/contacts");

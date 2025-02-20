@@ -12,7 +12,7 @@ function Contacts() {
   // Fetch contacts from the backend
   const fetchContacts = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/${userId}`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/${userId}`);
       setContacts(res.data);
     } catch (err) {
       console.error(err);
@@ -46,7 +46,7 @@ function Contacts() {
         phone: Array.isArray(c.tel) ? c.tel[0] : c.tel,
       }));
       // Send contacts to the backend to sync (or resync)
-      await axios.post("http://localhost:5000/api/contacts/sync", {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/contacts/sync`, {
         userId,
         contacts: contactsToSync,
       });
