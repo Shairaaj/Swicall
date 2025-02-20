@@ -12,7 +12,9 @@ function Contacts() {
   // Fetch contacts from the backend
   const fetchContacts = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/${userId}`);
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/contacts/${userId}`
+      );
       setContacts(res.data);
     } catch (err) {
       console.error(err);
