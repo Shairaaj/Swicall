@@ -9,7 +9,6 @@ function Contacts() {
   const userId = localStorage.getItem("userId");
   const navigate = useNavigate();
 
-  // Fetch contacts from the backend
   const fetchContacts = async () => {
     try {
       const res = await axios.get(
@@ -28,26 +27,22 @@ function Contacts() {
   const handleSyncContacts = async () => {
     try {
       let selectedContacts = [];
-      // Try using the Contacts Picker API (available on some browsers)
       if (navigator.contacts && navigator.contacts.select) {
         const props = ["name", "tel"];
         selectedContacts = await navigator.contacts.select(props, {
           multiple: true,
         });
       } else {
-        // Fallback: simulate contact selection for testing
         selectedContacts = [
           { name: ["John Doe"], tel: ["1234567890"] },
           { name: ["Jane Smith"], tel: ["0987654321"] },
         ];
         alert("Contacts Picker API not supported; using simulated contacts");
       }
-      // Normalize the contacts (taking the first name and first telephone)
       const contactsToSync = selectedContacts.map((c) => ({
         name: Array.isArray(c.name) ? c.name[0] : c.name,
         phone: Array.isArray(c.tel) ? c.tel[0] : c.tel,
       }));
-      // Send contacts to the backend to sync (or resync)
       await axios.post(`${import.meta.env.VITE_API_URL}/api/contacts/sync`, {
         userId,
         contacts: contactsToSync,
@@ -70,19 +65,21 @@ function Contacts() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Contacts</h2>
-      <button onClick={handleSyncContacts}>Sync Contacts</button>
-      <button onClick={handleLogout} style={{ marginLeft: "10px" }}>
-        Logout
-      </button>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <table
-        border="1"
-        cellPadding="10"
-        cellSpacing="0"
-        style={{ marginTop: "20px", width: "100%" }}
-      >
+    <div style={styles.container}>
+      <h2 style={styles.heading}>Contacts</h2>
+      <div style={styles.buttonContainer}>
+        <button style={styles.button} onClick={handleSyncContacts}>
+          Sync Contacts
+        </button>
+        <button
+          style={{ ...styles.button, backgroundColor: "#e74c3c" }}
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
+      </div>
+      {error && <p style={styles.errorText}>{error}</p>}
+      <table style={styles.table}>
         <thead>
           <tr>
             <th>Serial No.</th>
@@ -98,13 +95,18 @@ function Contacts() {
               <td>{contact.name}</td>
               <td>{contact.phone}</td>
               <td>
-                <button onClick={() => handleCopy(contact.phone)}>Copy</button>
+                <button
+                  style={styles.copyButton}
+                  onClick={() => handleCopy(contact.phone)}
+                >
+                  📋 Copy
+                </button>
               </td>
             </tr>
           ))}
           {contacts.length === 0 && (
             <tr>
-              <td colSpan="4" style={{ textAlign: "center" }}>
+              <td colSpan="4" style={styles.noContacts}>
                 No contacts found. Please sync contacts.
               </td>
             </tr>
@@ -114,5 +116,59 @@ function Contacts() {
     </div>
   );
 }
+
+const styles = {
+  container: {
+    maxWidth: "800px",
+    margin: "40px auto",
+    padding: "20px",
+    backgroundColor: "#f9f9f9",
+    borderRadius: "10px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+    fontFamily: "Arial, sans-serif",
+    textAlign: "center",
+  },
+  heading: {
+    fontSize: "24px",
+    color: "#333",
+  },
+  buttonContainer: {
+    marginBottom: "20px",
+  },
+  button: {
+    padding: "10px 15px",
+    margin: "5px",
+    backgroundColor: "#3498db",
+    color: "white",
+    border: "none",
+    borderRadius: "5px",
+    cursor: "pointer",
+    fontSize: "16px",
+  },
+  errorText: {
+    color: "red",
+    fontSize: "14px",
+  },
+  table: {
+    width: "100%",
+    borderCollapse: "collapse",
+    marginTop: "20px",
+  },
+  copyButton: {
+    padding: "5px 10px",
+    fontSize: "14px",
+    backgroundColor: "#2ecc71",
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    cursor: "pointer",
+  },
+  noContacts: {
+    textAlign: "center",
+    padding: "15px",
+    fontSize: "16px",
+    color: "#777",
+  },
+};
 
 export default Contacts;
