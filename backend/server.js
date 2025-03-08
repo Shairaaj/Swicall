@@ -1,3 +1,4 @@
+//backend/server.js
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
@@ -5,7 +6,7 @@ const cors = require("cors");
 
 const authRoutes = require("./routes/auth");
 const contactsRoutes = require("./routes/contacts");
-
+const privacyPolicy= require("./routes/privacyPolicy");
 const app = express();
 
 // Middleware
@@ -28,6 +29,6 @@ mongoose
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/contacts", contactsRoutes);
-
+app.use("/privacy", privacyPolicy);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
