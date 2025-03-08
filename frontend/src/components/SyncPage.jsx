@@ -47,6 +47,7 @@ const SyncPage = () => {
           }
         },
       });
+      console.log(import.meta.env.VITE_API_BASE_URL);
       client.requestAccessToken();
     } else {
       setMessage("Google API not loaded");
