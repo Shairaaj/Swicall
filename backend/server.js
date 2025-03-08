@@ -10,7 +10,14 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors(
+    {
+      origin: ["http://localhost:5173", "https://swicall.vercel.app"],
+      credentials: true,
+    }
+  )
+);
 
 // Connect to MongoDB using the URI from .env
 mongoose

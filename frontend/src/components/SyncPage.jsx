@@ -116,7 +116,7 @@ const SyncPage = () => {
       });
       setContacts(contacts.filter((contact) => contact._id !== id));
     } catch (err) {
-      console.error(err);
+      console.error("ERROR:",err);
       setMessage(err.response?.data?.message || "Remove failed");
     }
   };
