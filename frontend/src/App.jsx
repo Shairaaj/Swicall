@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import LoginSignup from "./components/LoginSignup";
 import SyncPage from "./components/SyncPage";
 import ContactsPage from "./components/ContactsPage";
+import PrivacyPolicy from "./components/PrivacyPolicy"; // Import privacy page
 
 const App = () => {
   const token = localStorage.getItem("token");
@@ -20,6 +21,7 @@ const App = () => {
         path="/contacts"
         element={token ? <ContactsPage /> : <Navigate to="/" />}
       />
+      <Route path="/privacy" element={<PrivacyPolicy />} />
     </Routes>
   );
 };
