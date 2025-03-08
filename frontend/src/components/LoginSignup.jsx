@@ -54,7 +54,6 @@ const LoginSignup = () => {
     }
   };
 
-
   return (
     <div style={{ padding: "20px" }}>
       <h2>{isSignup ? "Sign Up" : "Login"}</h2>
@@ -84,6 +83,25 @@ const LoginSignup = () => {
       <button onClick={() => setIsSignup(!isSignup)}>
         {isSignup ? "Switch to Login" : "Switch to Sign Up"}
       </button>
+      <footer style={{ marginTop: "20px", fontSize: "0.9em" }}>
+        <p>
+          <a
+            href="https://www.termsfeed.com/live/238d42f3-8c51-4d88-9faa-5a2d8767c8a7"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Privacy Policy
+          </a>{" "}
+          |{" "}
+          <a
+            href="https://www.termsfeed.com/live/8f8a50da-0e7e-4e1a-9039-681429a322a0"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Terms of Service
+          </a>
+        </p>
+      </footer>
     </div>
   );
 };
