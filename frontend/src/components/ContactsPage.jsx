@@ -14,12 +14,16 @@ const ContactsPage = () => {
   const isSameDevice = user && user.deviceId === deviceId;
 
   useEffect(() => {
+    // Only fetch contacts if a valid token exists.
+    if (!token || token === "null") {
+      setContacts([]);
+      return;
+    }
     const fetchContacts = async () => {
       try {
         const res = await axios.get("/api/contacts", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          baseURL: import.meta.env.VITE_API_BASE_URL,
+          headers: { Authorization: `Bearer ${token}` },
         });
         if (Array.isArray(res.data)) {
           setContacts(res.data);
@@ -78,11 +82,16 @@ const ContactsPage = () => {
       setMessage("Modifications are not allowed from this device.");
       return;
     }
+    if (!token || token === "null") {
+      setMessage("User not authenticated");
+      return;
+    }
     try {
       const res = await axios.post(
         "/api/contacts/sync",
         { accessToken },
         {
+          baseURL: import.meta.env.VITE_API_BASE_URL,
           headers: {
             Authorization: `Bearer ${token}`,
             "x-device-id": deviceId,
@@ -106,6 +115,7 @@ const ContactsPage = () => {
     localStorage.removeItem("user");
     setContacts([]);
     navigate("/");
+    window.location.reload();
   };
 
   const handleCopy = (phone) => {
@@ -117,8 +127,13 @@ const ContactsPage = () => {
       setMessage("Modifications are not allowed from this device.");
       return;
     }
+    if (!token || token === "null") {
+      setMessage("User not authenticated");
+      return;
+    }
     try {
       await axios.delete(`/api/contacts/${id}`, {
+        baseURL: import.meta.env.VITE_API_BASE_URL,
         headers: {
           Authorization: `Bearer ${token}`,
           "x-device-id": deviceId,

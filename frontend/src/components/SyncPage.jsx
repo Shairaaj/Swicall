@@ -8,12 +8,14 @@ const SyncPage = () => {
   const [googleToken, setGoogleToken] = useState(null);
   const navigate = useNavigate();
 
+  // Read token, deviceId and user from localStorage
   const token = localStorage.getItem("token");
   const deviceId = localStorage.getItem("deviceId");
   const user = JSON.parse(localStorage.getItem("user"));
   const isSameDevice = user && user.deviceId === deviceId;
 
   useEffect(() => {
+    // Load Google Identity Services if not already loaded
     if (!window.google) {
       const script = document.createElement("script");
       script.src = "https://accounts.google.com/gsi/client";
@@ -56,11 +58,17 @@ const SyncPage = () => {
       setMessage("Modifications are not allowed from this device.");
       return;
     }
+    // Guard: if token is missing or "null", do not call the API
+    if (!token || token === "null") {
+      setMessage("User not authenticated");
+      return;
+    }
     try {
       const res = await axios.post(
         "/api/contacts/sync",
         { accessToken },
         {
+          baseURL: import.meta.env.VITE_API_BASE_URL,
           headers: {
             Authorization: `Bearer ${token}`,
             "x-device-id": deviceId,
@@ -82,7 +90,9 @@ const SyncPage = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
+    // Redirect to login page and force a full reload
     navigate("/");
+    window.location.reload();
   };
 
   const handleCopy = (phone) => {
@@ -94,12 +104,15 @@ const SyncPage = () => {
       setMessage("Modifications are not allowed from this device.");
       return;
     }
+    // Guard: if token is missing or "null", do not proceed
+    if (!token || token === "null") {
+      setMessage("User not authenticated");
+      return;
+    }
     try {
       await axios.delete(`/api/contacts/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "x-device-id": deviceId,
-        },
+        baseURL: import.meta.env.VITE_API_BASE_URL,
+        headers: { Authorization: `Bearer ${token}`, "x-device-id": deviceId },
       });
       setContacts(contacts.filter((contact) => contact._id !== id));
     } catch (err) {

@@ -10,7 +10,7 @@ const LoginSignup = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  // Generate and store deviceId if not exists
+  // Ensure a deviceId is stored in localStorage
   useEffect(() => {
     let deviceId = localStorage.getItem("deviceId");
     if (!deviceId) {
@@ -22,17 +22,38 @@ const LoginSignup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const deviceId = localStorage.getItem("deviceId");
+
     try {
       const endpoint = isSignup ? "/api/auth/signup" : "/api/auth/login";
-      const res = await axios.post(endpoint, { email, password, deviceId });
-      localStorage.setItem("token", res.data.token);
+      const res = await axios.post(
+        endpoint,
+        { email, password, deviceId },
+        {
+          baseURL: import.meta.env.VITE_API_BASE_URL,
+        }
+      );
+
+      // Ensure token exists before storing
+      if (res.data.token) {
+        localStorage.setItem("token", res.data.token);
+      } else {
+        console.error("No token received from server!");
+      }
+
       localStorage.setItem("user", JSON.stringify(res.data.user));
-      navigate(isSignup ? "/sync" : "/contacts");
+
+      // Force a full reload after redirect so that the App rechecks authentication
+      if (isSignup) {
+        window.location.assign("/sync");
+      } else {
+        window.location.assign("/contacts");
+      }
     } catch (err) {
       console.error(err);
       setMessage(err.response?.data?.message || "Error occurred");
     }
   };
+
 
   return (
     <div style={{ padding: "20px" }}>
