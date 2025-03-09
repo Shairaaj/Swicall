@@ -1,3 +1,4 @@
+//components/SyncPage.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -53,6 +54,7 @@ const SyncPage = () => {
       setMessage("Google API not loaded");
     }
   };
+
 
   const syncContacts = async (accessToken) => {
     if (!isSameDevice) {
