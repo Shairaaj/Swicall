@@ -25,10 +25,11 @@ router.post("/sync", auth, async (req, res) => {
 
     // Check device verification (only allow if device matches)
     const deviceId = req.headers["x-device-id"];
-    console.log("Device from header:", req.headers["x-device-id"]);
-    console.log("User's device ID:", req.user.deviceId);
+    
 
     if (deviceId !== req.user.deviceId) {
+    console.log("Device from header:", req.headers["x-device-id"]);
+    console.log("User's device ID:", req.user.deviceId);
       return res
         .status(403)
         .json({ message: "Device not verified for modifications" });
@@ -74,6 +75,8 @@ router.delete("/:id", auth, async (req, res) => {
   try {
     const deviceId = req.headers["x-device-id"];
     if (deviceId !== req.user.deviceId) {
+      console.log("Device from header:", req.headers["x-device-id"]);
+      console.log("User's device ID:", req.user.deviceId);
       return res
         .status(403)
         .json({ message: "Device not verified for modifications" });
