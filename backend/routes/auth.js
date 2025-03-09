@@ -20,7 +20,7 @@ router.post("/signup", async (req, res) => {
     await newUser.save();
 
     const token = jwt.sign(
-      { id: newUser._id, deviceId: newUser.deviceId },
+      { id: newUser.id, deviceId: newUser.deviceId },
       JWT_SECRET,
       { expiresIn: "1d" }
     );
@@ -47,7 +47,7 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
 
     const token = jwt.sign(
-      { id: user._id, deviceId: user.deviceId },
+      { id: user.id, deviceId: user.deviceId },
       JWT_SECRET,
       { expiresIn: "1d" }
     );
