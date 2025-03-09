@@ -8,7 +8,7 @@ const auth = require("../middleware/auth");
 // GET all contacts for authenticated user
 router.get("/", auth, async (req, res) => {
   try {
-    const contacts = await Contact.find({ user: req.user._id });
+    const contacts = await Contact.find({ user: req.user.id });
     res.json(contacts);
   } catch (err) {
     console.error(err);
@@ -61,10 +61,10 @@ router.post("/sync", auth, async (req, res) => {
       .filter((contact) => contact.phone !== "");
 
     // Remove all previous contacts and insert the new ones
-    await Contact.deleteMany({ user: req.user._id });
+    await Contact.deleteMany({ user: req.user.id });
     const newContacts = contactsData.map((contact) => ({
       ...contact,
-      user: req.user._id,
+      user: req.user.id,
     }));
     const savedContacts = await Contact.insertMany(newContacts);
     res.json(savedContacts);
@@ -86,8 +86,8 @@ router.delete("/:id", auth, async (req, res) => {
         .json({ message: "Device not verified for modifications" });
     }
     const contact = await Contact.findOne({
-      _id: req.params.id,
-      user: req.user._id,
+      id: req.params.id,
+      user: req.user.id,
     });
     if (!contact) return res.status(404).json({ message: "Contact not found" });
     await contact.remove();
