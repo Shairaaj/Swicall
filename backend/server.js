@@ -11,24 +11,29 @@ const app = express();
 
 // CORS Headers Middleware (Place this before any routes or CORS setup)
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Origin", "https://swicall.vercel.app");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, x-device-id"
+  ); // Include x-device-id
   if (req.method === "OPTIONS") {
-    return res.sendStatus(200); // Handle preflight requests
+    return res.sendStatus(200);
   }
   next();
 });
 
+
 // CORS Middleware (Keep this after manual headers)
 app.use(
   cors({
-    origin: "*", // Allow all origins temporarily for debugging
+    origin: "https://swicall.vercel.app", // Allow only your frontend
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"],
     methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization", "x-device-id"], // Add x-device-id
   })
 );
+
 
 // Middleware for parsing JSON
 app.use(express.json());
