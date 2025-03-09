@@ -119,7 +119,7 @@ const SyncPage = () => {
         baseURL: import.meta.env.VITE_API_BASE_URL,
         headers: { Authorization: `Bearer ${token}`, "x-device-id": deviceId },
       });
-      setContacts(contacts.filter((contact) => contact.id !== id));
+      setContacts(contacts.filter((contact) => contact._id !== id));
     } catch (err) {
       console.error("ERROR:",err);
       setMessage(err.response?.data?.message || "Remove failed");
@@ -147,7 +147,7 @@ const SyncPage = () => {
           </thead>
           <tbody>
             {contacts.map((contact, index) => (
-              <tr key={contact.id}>
+              <tr key={contact._id}>
                 <td>{index + 1}</td>
                 <td>{contact.name}</td>
                 <td>{contact.phone}</td>
@@ -158,7 +158,7 @@ const SyncPage = () => {
                 </td>
                 {isSameDevice && (
                   <td>
-                    <button onClick={() => handleRemove(contact.id)}>
+                    <button onClick={() => handleRemove(contact._id)}>
                       Remove
                     </button>
                   </td>

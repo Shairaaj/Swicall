@@ -140,7 +140,7 @@ const ContactsPage = () => {
           "x-device-id": deviceId,
         },
       });
-      setContacts(contacts.filter((contact) => contact.id !== id));
+      setContacts(contacts.filter((contact) => contact._id !== id));
     } catch (err) {
       console.error(err);
       setMessage(err.response?.data?.message || "Remove failed");
@@ -168,7 +168,7 @@ const ContactsPage = () => {
           </thead>
           <tbody>
             {contacts.map((contact, index) => (
-              <tr key={contact.id}>
+              <tr key={contact._id}>
                 <td>{index + 1}</td>
                 <td>{contact.name}</td>
                 <td>{contact.phone}</td>
@@ -179,7 +179,7 @@ const ContactsPage = () => {
                 </td>
                 {isSameDevice && (
                   <td>
-                    <button onClick={() => handleRemove(contact.id)}>
+                    <button onClick={() => handleRemove(contact._id)}>
                       Remove
                     </button>
                   </td>
