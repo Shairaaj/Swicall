@@ -4,6 +4,7 @@ const router = express.Router();
 const axios = require("axios");
 const Contact = require("../models/Contact");
 const auth = require("../middleware/auth");
+const mongoose= require("mongoose");
 
 // GET all contacts for authenticated user
 router.get("/", auth, async (req, res) => {
