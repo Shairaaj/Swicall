@@ -79,7 +79,6 @@ router.delete("/:id", auth, async (req, res) => {
     console.log("Request to delete contact:", req.params.id);
     console.log("User making the request:", req.user.id);
 
-    // Ensure user ID exists
     if (!req.user || !req.user.id) {
       return res.status(401).json({ message: "User not authenticated" });
     }
@@ -87,17 +86,17 @@ router.delete("/:id", auth, async (req, res) => {
     // Convert user ID to ObjectId (if necessary)
     const userId = new mongoose.Types.ObjectId(req.user.id);
 
-    // Find and delete the contact
-    const contact = await Contact.findOneAndDelete({
-      _id: req.params.id,
-      user: userId,
-    });
+    // Find contact before deleting
+    const contact = await Contact.findOne({ _id: req.params.id, user: userId });
 
     if (!contact) {
       return res.status(404).json({ message: "Contact not found" });
     }
 
-    res.json({ message: "Contact removed" });
+    // Delete the contact
+    await Contact.deleteOne({ _id: req.params.id });
+
+    res.json({ message: "Contact removed successfully" });
   } catch (err) {
     console.error("Delete Error:", err);
     res.status(500).json({ message: "Server error" });
