@@ -22,7 +22,6 @@ router.post("/sync", auth, async (req, res) => {
   try {
     const { accessToken } = req.body;
     console.log("Received access token:",accessToken);
-console.log("req.user:", req.user);
     if (!accessToken)
       return res.status(400).json({ message: "Access token is required" });
 
@@ -61,6 +60,7 @@ console.log("req.user:", req.user);
 
     // Remove all previous contacts and insert the new ones
     await Contact.deleteMany({ user: req.user.id });
+    console.log("User ID from auth middleware:", req.user.id);
     const newContacts = contactsData.map((contact) => ({
       ...contact,
       user: req.user.id,

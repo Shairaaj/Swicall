@@ -18,8 +18,8 @@ const auth = (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("Decoded JWT:", decoded);
     req.user = { id: decoded.id, deviceId: decoded.deviceId };
-
     next();
   } catch (error) {
     console.error("JWT verification error:", error.message);
