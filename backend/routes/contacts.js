@@ -74,7 +74,6 @@ router.post("/sync", auth, async (req, res) => {
 });
 
 // DELETE a contact by its ID
-// DELETE a contact by its ID
 router.delete("/:id", auth, async (req, res) => {
   try {
     const deviceId = req.headers["x-device-id"];
@@ -88,6 +87,7 @@ router.delete("/:id", auth, async (req, res) => {
       _id: req.params.id,
       user: req.user.id,
     });
+    console.log("Found contact before deleting:", contact);
     if (!contact) return res.status(404).json({ message: "Contact not found" });
     await contact.remove();
     res.json({ message: "Contact removed" });
