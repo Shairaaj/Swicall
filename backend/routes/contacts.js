@@ -25,6 +25,9 @@ router.post("/sync", auth, async (req, res) => {
 
     // Check device verification (only allow if device matches)
     const deviceId = req.headers["x-device-id"];
+    console.log("Device from header:", req.headers["x-device-id"]);
+    console.log("User's device ID:", req.user.deviceId);
+
     if (deviceId !== req.user.deviceId) {
       return res
         .status(403)
