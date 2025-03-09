@@ -43,6 +43,7 @@ router.post("/sync", auth, async (req, res) => {
     });
 
     const connections = googleResponse.data.connections || [];
+    console.log("collections: ",connections);
     const contactsData = connections
       .map((person) => {
         let name =
