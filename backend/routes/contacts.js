@@ -22,13 +22,13 @@ router.post("/sync", auth, async (req, res) => {
   try {
     const { accessToken } = req.body;
     console.log("Received access token:",accessToken);
-
+console.log("req.user:", req.user);
     if (!accessToken)
       return res.status(400).json({ message: "Access token is required" });
 
     // Check device verification (only allow if device matches)
     const deviceId = req.headers["x-device-id"];
-    console.log("req.user:", req.user);
+    
     if (deviceId !== req.user.deviceId) {
     console.log("Device from header:", req.headers["x-device-id"]);
     console.log("User's device ID:", req.user.deviceId);
