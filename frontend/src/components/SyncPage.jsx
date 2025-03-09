@@ -79,7 +79,7 @@ const SyncPage = () => {
           },
         }
       );
-      console.log(res.data)
+      console.log("response", res.data)
       if (Array.isArray(res.data)) {
         setContacts(res.data);
         setMessage("Contacts synced successfully");
