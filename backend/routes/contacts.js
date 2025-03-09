@@ -76,23 +76,30 @@ router.post("/sync", auth, async (req, res) => {
 // DELETE a contact by its ID
 router.delete("/:id", auth, async (req, res) => {
   try {
-    const deviceId = req.headers["x-device-id"];
-    if (deviceId !== req.user.deviceId) {
-      console.log("Device from header:", req.headers["x-device-id"]);
-      console.log("User's device ID:", req.user.deviceId);
-      return res.status(403).json({ message: "Device not verified for modifications" });
+    console.log("Request to delete contact:", req.params.id);
+    console.log("User making the request:", req.user.id);
+
+    // Ensure user ID exists
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: "User not authenticated" });
     }
-    // Use _id instead of id
-    const contact = await Contact.findOne({
+
+    // Convert user ID to ObjectId (if necessary)
+    const userId = new mongoose.Types.ObjectId(req.user.id);
+
+    // Find and delete the contact
+    const contact = await Contact.findOneAndDelete({
       _id: req.params.id,
-      user: req.user.id,
+      user: userId,
     });
-    console.log("Found contact before deleting:", contact);
-    if (!contact) return res.status(404).json({ message: "Contact not found" });
-    await contact.remove();
+
+    if (!contact) {
+      return res.status(404).json({ message: "Contact not found" });
+    }
+
     res.json({ message: "Contact removed" });
   } catch (err) {
-    console.error(err);
+    console.error("Delete Error:", err);
     res.status(500).json({ message: "Server error" });
   }
 });
