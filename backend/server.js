@@ -9,36 +9,34 @@ const privacyPolicy = require("./routes/privacyPolicy");
 
 const app = express();
 
-// CORS Headers Middleware (Place this before any routes or CORS setup)
+// Custom CORS Middleware: Place this at the top, before other middleware.
 app.use((req, res, next) => {
+  // Replace with your deployed frontend URL (or add multiple if needed)
   res.header("Access-Control-Allow-Origin", "https://swicall.vercel.app");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header(
     "Access-Control-Allow-Headers",
     "Content-Type, Authorization, x-device-id"
-  ); // Include x-device-id
+  );
   if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
+    return res.sendStatus(200); // Respond OK to OPTIONS requests
   }
   next();
 });
 
-
-// CORS Middleware (Keep this after manual headers)
+// Alternatively, you can use the cors package with matching configuration:
 app.use(
   cors({
-    origin: "https://swicall.vercel.app", // Allow only your frontend
+    origin: "https://swicall.vercel.app",
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization", "x-device-id"], // Add x-device-id
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "x-device-id"],
   })
 );
 
-
-// Middleware for parsing JSON
 app.use(express.json());
 
-// Connect to MongoDB
+// Connect to MongoDB using the URI from .env
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected"))
