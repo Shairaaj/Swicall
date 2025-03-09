@@ -74,18 +74,18 @@ router.post("/sync", auth, async (req, res) => {
 });
 
 // DELETE a contact by its ID
+// DELETE a contact by its ID
 router.delete("/:id", auth, async (req, res) => {
   try {
     const deviceId = req.headers["x-device-id"];
     if (deviceId !== req.user.deviceId) {
       console.log("Device from header:", req.headers["x-device-id"]);
       console.log("User's device ID:", req.user.deviceId);
-      return res
-        .status(403)
-        .json({ message: "Device not verified for modifications" });
+      return res.status(403).json({ message: "Device not verified for modifications" });
     }
+    // Use _id instead of id
     const contact = await Contact.findOne({
-      id: req.params.id,
+      _id: req.params.id,
       user: req.user.id,
     });
     if (!contact) return res.status(404).json({ message: "Contact not found" });
@@ -96,5 +96,6 @@ router.delete("/:id", auth, async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
 
 module.exports = router;
