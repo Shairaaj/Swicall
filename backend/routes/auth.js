@@ -18,9 +18,12 @@ router.post("/signup", async (req, res) => {
     const newUser = new User({ email, password: hashedPassword, deviceId });
     await newUser.save();
 
-    const token = jwt.sign({ id: newUser._id }, JWT_SECRET, {
-      expiresIn: "1d",
-    });
+    const token = jwt.sign(
+      { id: newUser._id, deviceId: newUser.deviceId },
+      JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
     res.json({
       token,
       user: { email: newUser.email, deviceId: newUser.deviceId },
@@ -42,7 +45,12 @@ router.post("/login", async (req, res) => {
     if (!isMatch)
       return res.status(400).json({ message: "Invalid credentials" });
 
-    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "1d" });
+    const token = jwt.sign(
+      { id: user._id, deviceId: user.deviceId },
+      JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+
     res.json({ token, user: { email: user.email, deviceId: user.deviceId } });
   } catch (err) {
     console.error(err);
