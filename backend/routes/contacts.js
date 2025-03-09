@@ -21,6 +21,8 @@ router.get("/", auth, async (req, res) => {
 router.post("/sync", auth, async (req, res) => {
   try {
     const { accessToken } = req.body;
+    console.log("Received access token:",accessToken);
+
     if (!accessToken)
       return res.status(400).json({ message: "Access token is required" });
 

@@ -57,6 +57,7 @@ const SyncPage = () => {
 
 
   const syncContacts = async (accessToken) => {
+    console.log("Access Token being sent:", accessToken);
     if (!isSameDevice) {
       setMessage("Modifications are not allowed from this device.");
       return;
