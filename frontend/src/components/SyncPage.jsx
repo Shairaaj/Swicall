@@ -37,7 +37,7 @@ const SyncPage = () => {
       const client = window.google.accounts.oauth2.initTokenClient({
         client_id:
           import.meta.env.VITE_GOOGLE_CLIENT_ID ||
-          "512062808924-tgna45rk0e6dcuacdmjjj2lo4v59m9gq.apps.googleusercontent.com",
+          "658234338795-h2ajtsollajd0g3o1lt56o5l884iab0q.apps.googleusercontent.com",
         scope: "https://www.googleapis.com/auth/contacts.readonly",
         callback: (response) => {
           if (response.error) {
