@@ -1,7 +1,71 @@
-//components/ContactsPage.jsx
+// components/ContactsPage.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+
+const Container = styled.div`
+  padding: 20px;
+  font-family: "Arial", sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+`;
+
+const Header = styled.h2`
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+`;
+
+const Button = styled.button`
+  padding: 10px 20px;
+  margin: 10px 10px 10px 0;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: #0056b3;
+  }
+`;
+
+const Message = styled.p`
+  color: red;
+  margin-top: 10px;
+  text-align: center;
+`;
+
+const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+`;
+
+const Thead = styled.thead`
+  background-color: #f1f1f1;
+`;
+
+const Th = styled.th`
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+`;
+
+const Td = styled.td`
+  padding: 12px;
+  border: 1px solid #ddd;
+`;
+
+const Tbody = styled.tbody`
+  tr {
+    &:nth-child(even) {
+      background-color: #fafafa;
+    }
+  }
+`;
 
 const ContactsPage = () => {
   const [contacts, setContacts] = useState([]);
@@ -148,50 +212,50 @@ const ContactsPage = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Your Contacts</h2>
+    <Container>
+      <Header>Your Contacts</Header>
       {isSameDevice && (
-        <button onClick={handleGoogleSignIn}>Sync Contacts with Google</button>
+        <Button onClick={handleGoogleSignIn}>Sync Contacts with Google</Button>
       )}
-      <button onClick={handleLogout}>Logout</button>
-      {message && <p>{message}</p>}
+      <Button onClick={handleLogout}>Logout</Button>
+      {message && <Message>{message}</Message>}
       {contacts.length > 0 ? (
-        <table border="1" cellPadding="10" style={{ marginTop: "20px" }}>
-          <thead>
+        <Table>
+          <Thead>
             <tr>
-              <th>Serial No.</th>
-              <th>Contact Name</th>
-              <th>Phone Number</th>
-              <th>Copy</th>
-              {isSameDevice && <th>Remove</th>}
+              <Th>Serial No.</Th>
+              <Th>Contact Name</Th>
+              <Th>Phone Number</Th>
+              <Th>Copy</Th>
+              {isSameDevice && <Th>Remove</Th>}
             </tr>
-          </thead>
-          <tbody>
+          </Thead>
+          <Tbody>
             {contacts.map((contact, index) => (
               <tr key={contact._id}>
-                <td>{index + 1}</td>
-                <td>{contact.name}</td>
-                <td>{contact.phone}</td>
-                <td>
-                  <button onClick={() => handleCopy(contact.phone)}>
+                <Td>{index + 1}</Td>
+                <Td>{contact.name}</Td>
+                <Td>{contact.phone}</Td>
+                <Td>
+                  <Button onClick={() => handleCopy(contact.phone)}>
                     Copy
-                  </button>
-                </td>
+                  </Button>
+                </Td>
                 {isSameDevice && (
-                  <td>
-                    <button onClick={() => handleRemove(contact._id)}>
+                  <Td>
+                    <Button onClick={() => handleRemove(contact._id)}>
                       Remove
-                    </button>
-                  </td>
+                    </Button>
+                  </Td>
                 )}
               </tr>
             ))}
-          </tbody>
-        </table>
+          </Tbody>
+        </Table>
       ) : (
-        <p>No contacts found.</p>
+        <Message>No contacts found.</Message>
       )}
-    </div>
+    </Container>
   );
 };
 
