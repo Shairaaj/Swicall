@@ -1,25 +1,25 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
-// Set the backend API base URL based on environment
+// Ensure Vite's environment variable is defined
+const mode = process.env.NODE_ENV || "development"; // Fallback if import.meta.env is undefined
+
 const API_BASE_URL =
-  process.env.NODE_ENV === "production"
+  mode === "production"
     ? "https://swicall.onrender.com"
     : "http://localhost:5000";
 
 export default defineConfig({
   plugins: [react()],
-  build: {
-    rollupOptions: {
-      external: ["styled-components"], // Add this if styled-components is causing issues
-    },
+  define: {
+    "import.meta.env.VITE_API_BASE_URL": JSON.stringify(API_BASE_URL),
   },
   server: {
     proxy: {
-      "/privacy": {
-        target: API_BASE_URL,
+      "/api": {
+        target: "http://localhost:5000",
         changeOrigin: true,
-        secure: process.env.NODE_ENV === "production", // Use HTTPS in production
+        secure: false,
       },
     },
   },
