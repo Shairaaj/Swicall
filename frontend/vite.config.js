@@ -9,6 +9,11 @@ const API_BASE_URL =
 
 export default defineConfig({
   plugins: [react()],
+  build: {
+    rollupOptions: {
+      external: ["styled-components"], // Add this if styled-components is causing issues
+    },
+  },
   server: {
     proxy: {
       "/privacy": {
