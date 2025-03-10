@@ -24,7 +24,8 @@
     "nodemon": "^3.1.9",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
-    "react-google-login": "^5.2.2"
+    "react-google-login": "^5.2.2",
+    "styled-components": "^6.1.15"
   },
   "repository": {
     "type": "git",
