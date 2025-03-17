@@ -4,7 +4,7 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-const { sendWelcomeEmail } = require("../email");
+const { sendWelcomeEmail } = require("../resend/email");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
