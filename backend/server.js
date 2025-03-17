@@ -3,7 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-
+const resendRoutes = require("./routes/resend");
 const authRoutes = require("./routes/auth");
 const contactsRoutes = require("./routes/contacts");
 const privacyPolicy = require("./routes/privacyPolicy");
@@ -47,6 +47,6 @@ mongoose
 app.use("/api/auth", authRoutes);
 app.use("/api/contacts", contactsRoutes);
 app.use("/privacy", privacyPolicy);
-
+app.use("/api/auth", authRoutes);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
