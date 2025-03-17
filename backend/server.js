@@ -3,6 +3,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+
 const authRoutes = require("./routes/auth");
 const contactsRoutes = require("./routes/contacts");
 const privacyPolicy = require("./routes/privacyPolicy");
@@ -11,7 +12,6 @@ const app = express();
 
 // Custom CORS Middleware: Place this at the top, before other middleware.
 app.use((req, res, next) => {
-  // Replace with your deployed frontend URL (or add multiple if needed)
   res.header("Access-Control-Allow-Origin", "https://swicall.vercel.app");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
   res.header(
@@ -19,12 +19,11 @@ app.use((req, res, next) => {
     "Content-Type, Authorization, x-device-id"
   );
   if (req.method === "OPTIONS") {
-    return res.sendStatus(200); // Respond OK to OPTIONS requests
+    return res.sendStatus(200);
   }
   next();
 });
 
-// Alternatively, you can use the cors package with matching configuration:
 app.use(
   cors({
     origin: "https://swicall.vercel.app",
@@ -46,6 +45,6 @@ mongoose
 app.use("/api/auth", authRoutes);
 app.use("/api/contacts", contactsRoutes);
 app.use("/privacy", privacyPolicy);
-app.use("/api/auth", authRoutes);
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
